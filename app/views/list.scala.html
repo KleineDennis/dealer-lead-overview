@@ -1,0 +1,63 @@
+@(leads: List[Lead])
+
+
+@duration(lead: Lead) = @{
+    if(lead.lead_type == "Call") {
+        val minutes = lead.duration_seconds.getOrElse[Long](0)/60
+        val seconds = lead.duration_seconds.getOrElse[Long](0)%60
+
+        if(minutes > 0) {
+            <b>Dauer: {minutes}m {seconds}s</b>
+        } else {
+            <b>Dauer: {seconds}s</b>
+        }
+    }
+  }
+
+
+@datetime(lead: Lead) = @{
+    val dateFormat = new java.text.SimpleDateFormat("EE. dd.MM.yyyy")
+    val timeFormat = new java.text.SimpleDateFormat("HH:mm:ss")
+    val date = dateFormat.format(lead.occurrence_time)
+    val time = timeFormat.format(lead.occurrence_time)
+    <b>{date} um {time}</b>
+}
+
+
+@main("Leadlist") {
+
+    <table class="leads">
+        @for(lead <- leads) {
+        <tr>
+            <td>
+            @if(lead.lead_type == "Call") {
+                @lead.duration_seconds match {
+                case Some(s) => { <img src="@routes.Assets.versioned("images/green.png")"> }
+                case None =>    { <img src="@routes.Assets.versioned("images/red.png")"> }
+                }
+            } else {
+                <img src="@routes.Assets.versioned("images/email.png")">
+            }
+            </td>
+            <td>
+                @if(lead.lead_type == "Call") {
+                    @lead.duration_seconds match {
+                    case Some(s) => { <b>Beantworteter Anruf</b> Anrufnummer: @lead.sender }
+                    case None =>    { <b>Verpasster Anruf</b> Anrufnummer: @lead.sender }
+                    }
+                } else {
+                    <b>Email</b> Absender: @lead.sender
+                }
+
+                <br>
+                @datetime(lead)
+                <br>
+                @duration(lead)
+                <br>
+                @lead.make
+                @lead.model
+            </td>
+        }
+        </tr>
+    </table>
+}

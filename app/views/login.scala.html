@@ -1,0 +1,39 @@
+@(sig_request: String, sell_id: Long)
+
+@main("Welcome to Play") {
+<h1>Login</h1>
+<body>
+<div>
+  <div class="a0-widget a0-mode-signin" dir="auto" id="a0-widget">
+    <div class="a0-signin a0-theme-static">
+      <div class="a0-popup">
+        <div class="a0-overlay a0-ie8-overlay a0-active">
+          <div class="a0-centrix">
+            <div class="a0-panel a0-onestep a0-active" id="a0-onestep">
+
+              <div class="a0-header a0-top-header">
+                <div class="a0-image" style="display: none"></div>
+
+                <h1>
+                  2-Step Verification
+                </h1>
+              </div>
+
+              <div class="a0-notloggedin a0-mode" style="">
+                <iframe id="duo_iframe" width="620" height="430" frameborder="0"
+                        data-host="api-08904031.duosecurity.com"
+                        data-sig-request=@sig_request
+                        data-post-action="/list/@sell_id">
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+}
